@@ -7,12 +7,8 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
-
+  Build:
+    runs-on: windows-latest
     steps:
     - name: Checkout the repository
       uses: actions/checkout@v4
@@ -28,11 +24,10 @@ jobs:
     - name: Build App
       run: |
         pyinstaller --onefile ./patch_ga.py
-      shell: bash
+      shell: pwsh
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: JustAsPlanned
-        path: |
-          dist/*
+        path: dist/patch_ga.exe
