@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  contents: read
+
 jobs:
   Build:
     runs-on: windows-latest
@@ -24,10 +27,14 @@ jobs:
     - name: Build App
       run: |
         pyinstaller --onefile ./patch_ga.py
+        pyinstaller --onefile ./patch_li.py
       shell: pwsh
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: JustAsPlanned
-        path: dist/patch_ga.exe
+        path: |
+          dist/patch_ga.exe
+          dist/patch_li.exe
+          README.md
