@@ -38,4 +38,3 @@ jobs:
           dist/patch_ga.exe
           dist/main_li.exe
           dist/patch_li.exe
-          README.md
