@@ -25,16 +25,16 @@ jobs:
       run: python -m pip install pyinstaller
 
     - name: Build App
+      shell: bash
       run: |
         pyinstaller --onefile ./patch_ga.py
         pyinstaller --onefile ./patch_li.py
-      shell: pwsh
-
+        g++ main_li.cpp -o dist/main_li.exe -static
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: JustAsPlanned
         path: |
           dist/patch_ga.exe
+          dist/main_li.exe
           dist/patch_li.exe
-          README.md
