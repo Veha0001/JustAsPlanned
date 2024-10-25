@@ -3,6 +3,10 @@
 *.bak
 *.dll*
 *.exe*
+main_li
+mob_li
+patch_li
+mod_li
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
