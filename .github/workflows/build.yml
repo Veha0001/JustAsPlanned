@@ -15,26 +15,17 @@ jobs:
     steps:
     - name: Checkout the repository
       uses: actions/checkout@v4
-
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.12"
-
-    - name: Install PyInstaller
-      run: python -m pip install pyinstaller
-
-    - name: Build App
+        
+    - name: Build 
       shell: bash
       run: |
-        pyinstaller --onefile ./patch_ga.py
-        pyinstaller --onefile ./patch_li.py
-        g++ main_li.cpp -o dist/main_li.exe -static
+        g++ patch_ga.cpp -o build/patch_ga.exe -static
+        g++ patch_li.cpp -o build/patch_li.exe -static
+
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: JustAsPlanned
         path: |
-          dist/patch_ga.exe
-          dist/main_li.exe
-          dist/patch_li.exe
+          build/patch_ga.exe
+          build/main_li.exe
