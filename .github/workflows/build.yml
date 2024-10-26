@@ -19,13 +19,13 @@ jobs:
     - name: Build 
       shell: bash
       run: |
-        g++ patch_ga.cpp -o build/patch_ga.exe -static
-        g++ patch_li.cpp -o build/patch_li.exe -static
+        g++ patch_ga.cpp -o patch_ga.exe -static
+        g++ patch_li.cpp -o patch_li.exe -static
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: JustAsPlanned
         path: |
-          build/patch_ga.exe
-          build/main_li.exe
+          patch_ga.exe
+          patch_li.exe
