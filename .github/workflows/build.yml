@@ -21,7 +21,12 @@ jobs:
       run: |
         g++ patch_ga.cpp -o patch_ga.exe -static
         g++ patch_li.cpp -o patch_li.exe -static
-
+    - name: Edit Build
+      shell: bash
+      run: |
+        choco install rcedit -y
+        rcedit patch_ga.exe --set-icon "exe.ico" --set-file-version "1.0" --set-product-version "1.0"
+        rcedit patch_li.exe --set-icon "exe.ico" --set-file-version "1.0" --set-product-version "1.0"
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
