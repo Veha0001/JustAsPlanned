@@ -6,6 +6,10 @@
 #include <iomanip>
 #include <stdexcept>
 
+#ifdef _WIN32
+#include <conio.h> // For _getch()
+#endif
+
 // Define colors for console output
 enum Color {
     RESET = 0,
@@ -89,9 +93,9 @@ void patchBinary(const std::string& inputFile, const std::string& outputFile, co
             std::ostringstream offsetStream;
             offsetStream << "0x" << std::hex << std::uppercase << index;
 
-            printColored("[✓] FOUND A MATCH FOR PATTERN: " + bytesToHexString(orig, true, true), GREEN, true);
-            printColored("[?] AT OFFSET: " + offsetStream.str(), YELLOW, true);
-            printColored("⟩ PATCHED WITH: " + bytesToHexString(repl, true, false) + " AT OFFSET: " + offsetStream.str(), MAGENTA, true);
+            printColored("[FOUND] Match for pattern: " + bytesToHexString(orig, true, true), GREEN, true);
+            printColored("[OFFSET] At: " + offsetStream.str(), YELLOW, true);
+            printColored("[PATCH] Replaced with: " + bytesToHexString(repl, true, false) + " at offset: " + offsetStream.str(), MAGENTA, true);
             
             // Replace the bytes in the data
             std::copy(repl.begin(), repl.end(), data.begin() + index);
@@ -106,7 +110,12 @@ void patchBinary(const std::string& inputFile, const std::string& outputFile, co
     }
     outFile.write(reinterpret_cast<const char*>(data.data()), data.size());
     outFile.close();
-    printColored("[×] PATCHED FILE SAVED AS: " + outputFile, GREEN);
+    printColored("[DONE] Patched file saved as: " + outputFile, GREEN);
+
+#ifdef _WIN32
+    std::cout << "Press Enter to exit..." << std::endl;
+    _getch();
+#endif
 }
 
 int main() {
