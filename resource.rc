@@ -17,23 +17,23 @@ VS_VERSION_INFO VERSIONINFO
  PRODUCTVERSION 1,0,0,0
  FILEFLAGSMASK 0x3F
  FILEFLAGS 0x0
- BEGIN
-     BLOCK "StringFileInfo"
-     BEGIN
-         BLOCK "040904b0" // Language and code page
-         BEGIN
-             VALUE "CompanyName", "DevSenpai"
-             VALUE "FileDescription", "Patcher Application for Modifications"
-             VALUE "FileVersion", "1.0.0.0"
-             VALUE "InternalName", "Patcher"
-             VALUE "LegalCopyright", "Copyright (C) 2024"
-             VALUE "OriginalFilename", "Patcher.exe"
-             VALUE "ProductName", "Patcher Application"
-             VALUE "ProductVersion", "1.0.0.0"
-         END
-     END
-     BLOCK "VarFileInfo"
-     BEGIN
-         VALUE "Translation", 0x409, 1200
-     END
- END
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0" // Language and code page
+        BEGIN
+            VALUE "CompanyName", "DevSenpai"
+            VALUE "FileDescription", "Patcher Application for Modifications"
+            VALUE "FileVersion", "1.0.0.0"
+            VALUE "InternalName", "Patcher"
+            VALUE "LegalCopyright", "Copyright (C) 2024"
+            VALUE "OriginalFilename", "Patcher.exe"
+            VALUE "ProductName", "Patcher Application"
+            VALUE "ProductVersion", "1.0.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
