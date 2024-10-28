@@ -12,8 +12,6 @@ permissions:
 jobs:
   Build:
     runs-on: windows-latest
-    strategy:
-
     steps:
     - name: Checkout the repository
       uses: actions/checkout@v4
