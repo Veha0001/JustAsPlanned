@@ -13,8 +13,6 @@ jobs:
   Build:
     runs-on: windows-latest
     strategy:
-      matrix:
-        architecture: [x64, x86]
 
     steps:
     - name: Checkout the repository
@@ -23,21 +21,14 @@ jobs:
     - name: Build
       shell: bash
       run: |
-        # Set resource object file based on architecture
-        if [ "${{ matrix.architecture }}" == "x64" ]; then
-          windres resource.rc -o resource.o
-          g++ -m64 patch_ga.cpp resource.o -o patch_ga.exe -static
-          g++ -m64 patch_li.cpp resource.o -o patch_li.exe -static
-        else
-          windres resource.rc -o resource.o
-          g++ -m32 patch_ga.cpp resource.o -o patch_ga.exe -static -lkernel32
-          g++ -m32 patch_li.cpp resource.o -o patch_li.exe -static -lkernel32
-        fi
+        windres resource.rc -o resource.o
+        g++  patch_ga.cpp resource.o -o patch_ga.exe -static
+        g++  patch_li.cpp resource.o -o patch_li.exe -static
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: JustAsPlanned-${{ matrix.architecture }}
+        name: JustAsPlanned
         path: |
           patch_ga.exe
           patch_li.exe
