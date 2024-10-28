@@ -30,8 +30,8 @@ jobs:
           g++ -m64 patch_li.cpp resource.o -o patch_li.exe -static
         else
           windres resource.rc -o resource.o
-          g++ -m32 patch_ga.cpp resource.o -o patch_ga.exe -static
-          g++ -m32 patch_li.cpp resource.o -o patch_li.exe -static
+          g++ -m32 patch_ga.cpp resource.o -o patch_ga.exe -static -lkernel32
+          g++ -m32 patch_li.cpp resource.o -o patch_li.exe -static -lkernel32
         fi
 
     - name: Upload build artifacts
