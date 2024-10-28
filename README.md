@@ -18,4 +18,4 @@ The `consts.py`, `main.py`, and `utility.py` is not needed if you use the `patch
 
 
 > [!Note]
-> For faster version written in C++ check `master` branch!
+> Writing the code with GPT... -_-
