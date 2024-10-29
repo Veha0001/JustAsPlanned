@@ -105,10 +105,9 @@ void patchBinary(
                        bytesToHexString(orig, true, true),
                    GREEN, true);
       printColored("[OFFSET] At: " + offsetStream.str(), YELLOW, true);
-      printColored(
-          "[PATCH] Replaced with: " + bytesToHexString(repl, true, false) +
-              " at offset: " + offsetStream.str(),
-          MAGENTA, true);
+      printColored("[PATCH] Replaced with: " +
+                       bytesToHexString(repl, true, false),
+                   MAGENTA, true);
 
       // Replace the bytes in the data
       std::copy(repl.begin(), repl.end(), data.begin() + index);
