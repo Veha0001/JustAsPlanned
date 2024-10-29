@@ -104,7 +104,7 @@ void patchBinary(
       printColored("[FOUND] Match for pattern: " +
                        bytesToHexString(orig, true, true),
                    GREEN, true);
-      printColored("[OFFSET] At: " + offsetStream.str(), YELLOW, true);
+      printColored("[OFFSET] At: " + offsetStream.str(), CYAN, true);
       printColored("[PATCH] Replaced with: " +
                        bytesToHexString(repl, true, false),
                    MAGENTA, true);
