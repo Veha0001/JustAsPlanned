@@ -9,7 +9,7 @@ BEGIN
     BEGIN
       VALUE "CompanyName", "DevSenpai"
       VALUE "FileDescription", "Patch inject a binary file."
-      VALUE "FileVersion", "1.0"
+      VALUE "FileVersion", "1.1"
       VALUE "InternalName", "Patcher"
       VALUE "LegalCopyright", "Copyright (c) 2024 Dev. All Rights Reserved."
       VALUE "OriginalFilename", "Patcher.exe"
