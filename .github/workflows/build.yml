@@ -17,12 +17,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Get nlohmann/json
-        run:
-      - name: Build
-        shell: bash
         run: |
           mkdir nlohmann
           wget https://github.com/nlohmann/json/releases/download/v3.11.3/json.hpp -o nlohmann/json.hpp
+
+      - name: Build
+        shell: bash
+        run: |
           g++  ./jap/patch_ga.cpp -o patch_ga.exe -static -O2
           g++  ./jap/patch_li.cpp -o patch_li.exe -static -O2
           g++  ./jap/patch_so.cpp -o patch_so.exe -static -O2
