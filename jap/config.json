@@ -1,6 +1,6 @@
 {
   "Patcher": {
-    "dump_file": null,
+    "dump_file": "",
     "input_file": "GameAssembly.dll",
     "output_file": "GameAssembly_patched.dll",
     "patches": [
