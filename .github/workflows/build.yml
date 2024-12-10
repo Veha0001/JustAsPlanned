@@ -26,7 +26,7 @@ jobs:
       - name: Build
         shell: bash
         run: |
-          cp ./jap/config.json config.json
+          mv ./jap/config.json config.json
           g++  ./jap/patch_ga.cpp -o patch_ga.exe -static -O2
           g++  ./jap/patch_li.cpp -o patch_li.exe -static -O2
           g++  ./jap/patch_so.cpp -o patch_so.exe -static -O2
