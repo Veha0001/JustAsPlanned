@@ -29,7 +29,7 @@ jobs:
           g++  ./jap/patch_ga.cpp -o patch_ga.exe -static -O2
           g++  ./jap/patch_li.cpp -o patch_li.exe -static -O2
           g++  ./jap/patch_so.cpp -o patch_so.exe -static -O2
-          g++  ./jap/patcher.cpp -o patcher.exe -static -O2
+          g++  ./jap/patcher.cpp -o patcher.exe -static -O2 -I ./jap
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
