@@ -18,6 +18,7 @@ jobs:
 
       - name: Get nlohmann/json
         run: |
+          choco install wget
           mkdir nlohmann
           wget https://github.com/nlohmann/json/releases/download/v3.11.3/json.hpp -o nlohmann/json.hpp
 
