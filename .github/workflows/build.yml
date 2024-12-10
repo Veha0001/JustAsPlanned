@@ -2,9 +2,9 @@ name: Build
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 permissions:
   contents: read
@@ -13,20 +13,27 @@ jobs:
   Build:
     runs-on: windows-latest
     steps:
-    - name: Checkout the repository
-      uses: actions/checkout@v4
+      - name: Checkout the repository
+        uses: actions/checkout@v4
 
-    - name: Build
-      shell: bash
-      run: |
-        windres resource.rc -o resource.o
-        g++  patch_ga.cpp resource.o -o patch_ga.exe -static -O2
-        g++  patch_li.cpp resource.o -o patch_li.exe -static -O2
+      - name: Get nlohmann/json
+        run:
+      - name: Build
+        shell: bash
+        run: |
+          mkdir nlohmann
+          wget https://github.com/nlohmann/json/releases/download/v3.11.3/json.hpp -o nlohmann/json.hpp
+          g++  ./jap/patch_ga.cpp -o patch_ga.exe -static -O2
+          g++  ./jap/patch_li.cpp -o patch_li.exe -static -O2
+          g++  ./jap/patch_so.cpp -o patch_so.exe -static -O2
+          g++  ./jap/patcher.cpp -o patcher.exe -static -O2
 
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: JustAsPlanned
-        path: |
-          patch_ga.exe
-          patch_li.exe
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: JustAsPlanned
+          path: |
+            patch_ga.exe
+            patch_li.exe
+            patch_so.exe
+            patcher.exe
