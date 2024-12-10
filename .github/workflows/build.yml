@@ -31,7 +31,7 @@ jobs:
           g++  ./jap/patch_li.cpp -o patch_li.exe -static -O2
           g++  ./jap/patch_so.cpp -o patch_so.exe -static -O2
           g++  ./jap/patcher.cpp -o patcher.exe -static -O2 -I ./jap
-          7z a -r JustAsPlanned.zip *.exe *.json
+          7z a -r JustAsPlanned.zip *.exe config.json
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
