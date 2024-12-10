@@ -56,7 +56,7 @@ jobs:
         with:
           name: Archive
           tag_name: latest
-          body_path: |
+          body: |
             ## Release Notes
             latest build by:
             [![Runner](https://img.shields.io/badge/Build-Action-lightgreen?style=for-the-badge&logo=githubactions&logoColor=white)](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
