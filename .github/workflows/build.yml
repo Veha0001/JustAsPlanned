@@ -5,6 +5,12 @@ on:
     branches: ["main"]
   pull_request:
     branches: ["main"]
+  workflow_dispatch:
+    inputs:
+      okiedokie:
+        description: "Nerd Releases"
+        required: true
+        type: boolean
 
 permissions:
   contents: read
@@ -18,7 +24,7 @@ jobs:
 
       - name: Get nlohmann/json
         run: |
-          choco install wget --no-progress -y
+          choco install 7zip wget --no-progress -y
           mkdir nlohmann
           wget https://github.com/nlohmann/json/releases/download/v3.11.3/json.hpp -O nlohmann/json.hpp
           mv nlohmann jap
@@ -26,10 +32,12 @@ jobs:
       - name: Build
         shell: bash
         run: |
+          cp ./jap/config.json config.json
           g++  ./jap/patch_ga.cpp -o patch_ga.exe -static -O2
           g++  ./jap/patch_li.cpp -o patch_li.exe -static -O2
           g++  ./jap/patch_so.cpp -o patch_so.exe -static -O2
           g++  ./jap/patcher.cpp -o patcher.exe -static -O2 -I ./jap
+          7z a -r JustAsPlanned.zip *.exe *.json
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -40,3 +48,17 @@ jobs:
             patch_li.exe
             patch_so.exe
             patcher.exe
+            config.json
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: ${{ inputs.okiedokie }}
+        with:
+          name: Archive
+          tag_name: latest
+          body_path: |
+            ## Release Notes
+            latest build by:
+            [![Runner](https://img.shields.io/badge/Build-Action-lightgreen?style=for-the-badge&logo=githubactions&logoColor=white)](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          repository: Veha0001/JustAsPlanned
+          files: JustAsPlanned.zip
