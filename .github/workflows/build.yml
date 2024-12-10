@@ -58,10 +58,9 @@ jobs:
         with:
           name: JAP Archive
           make_latest: true
-          tag_name: build-jap
+          tag_name: latest
           body: |
             ## Release Notes
             latest build by:
             [![Runner](https://img.shields.io/badge/Build-Action-lightgreen?style=for-the-badge&logo=githubactions&logoColor=white)](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-          repository: Veha0001/JustAsPlanned
           files: JustAsPlanned.zip
