@@ -58,7 +58,7 @@ jobs:
         with:
           name: JAP Archive
           make_latest: true
-          tag_name: latest
+          tag_name: build-jap
           body: |
             ## Release Notes
             latest build by:
