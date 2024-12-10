@@ -53,8 +53,11 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v2
         if: ${{ inputs.okiedokie }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: Archive
+          name: JAP Archive
+          make_latest: true
           tag_name: latest
           body: |
             ## Release Notes
