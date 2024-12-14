@@ -19,8 +19,8 @@ jobs:
       - name: Get nlohmann/json
         run: |
           choco install 7zip wget --no-progress -y
-          mkdir jap/nlohmann -p
-          wget https://github.com/nlohmann/json/releases/download/v3.11.3/json.hpp -O nlohmann/json.hpp
+          mkdir -p jap/nlohmann 
+          wget https://github.com/nlohmann/json/releases/download/v3.11.3/json.hpp -O jap/nlohmann/json.hpp
 
       - name: Build
         shell: bash
