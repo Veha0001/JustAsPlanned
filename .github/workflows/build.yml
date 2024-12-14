@@ -19,9 +19,8 @@ jobs:
       - name: Get nlohmann/json
         run: |
           choco install 7zip wget --no-progress -y
-          mkdir nlohmann
+          mkdir jap/nlohmann -p
           wget https://github.com/nlohmann/json/releases/download/v3.11.3/json.hpp -O nlohmann/json.hpp
-          mv nlohmann jap
 
       - name: Build
         shell: bash
@@ -30,7 +29,7 @@ jobs:
           for file in ./jap/*.cpp; do
             exe_name=$(basename "${file%.cpp}.exe")
             g++ "$file" -o "$exe_name" -static -O2 -I ./jap
-          done          
+          done
           7z a -r JustAsPlanned.zip *.exe config.json
 
       - name: Upload build artifacts
@@ -49,7 +48,14 @@ jobs:
           name: JAP Archive
           make_latest: true
           tag_name: latest
+          files: JustAsPlanned.zip
           body: |
             ## Release Notes
             [![Runner](https://img.shields.io/badge/Build-Action-lightgreen?style=for-the-badge&logo=githubactions&logoColor=white)](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-          files: JustAsPlanned.zip
+
+            💖 **New Update**:  
+            - 🛠️ **Bug Fixes**: Fixed some little issues with love and care.  
+            - 🚀 **Performance**: Purr-fectly optimized for a smoother experience.  
+            - 🎨 **UI Tweaks**: Added a touch of color and love to the output.  
+
+            🥰 Thank you for being awesome! Enjoy the love-filled update! 💫
