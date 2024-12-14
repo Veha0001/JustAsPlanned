@@ -27,10 +27,10 @@ jobs:
         shell: bash
         run: |
           mv ./jap/config.json config.json
-          g++  ./jap/patch_ga.cpp -o patch_ga.exe -static -O2
-          g++  ./jap/patch_li.cpp -o patch_li.exe -static -O2
-          g++  ./jap/patch_so.cpp -o patch_so.exe -static -O2
-          g++  ./jap/patcher.cpp -o patcher.exe -static -O2 -I ./jap
+          for file in ./jap/*.cpp; do
+            exe_name=$(basename "${file%.cpp}.exe")
+            g++ "$file" -o "$exe_name" -static -O2 -I ./jap
+          done          
           7z a -r JustAsPlanned.zip *.exe config.json
 
       - name: Upload build artifacts
@@ -38,10 +38,7 @@ jobs:
         with:
           name: JustAsPlanned
           path: |
-            patch_ga.exe
-            patch_li.exe
-            patch_so.exe
-            patcher.exe
+            *.exe
             config.json
 
       - name: Release
