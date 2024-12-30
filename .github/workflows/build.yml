@@ -50,12 +50,12 @@ jobs:
           tag_name: latest
           files: JustAsPlanned.zip
           body: |
-            ## Release Notes
-            [![Runner](https://img.shields.io/badge/Build-Action-lightgreen?style=for-the-badge&logo=githubactions&logoColor=white)](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            # Release Note
+            [![Runner](https://img.shields.io/badge/Build-Workflow-black?style=for-the-badge&logo=cplusplusbuilder&logoColor=%23eff1f5&labelColor=%2340a02b&color=%235c5f77)](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
-            💖 **New Update**:  
-            - 🛠️ **Bug Fixes**: Fixed some little issues with love and care.  
-            - 🚀 **Performance**: Purr-fectly optimized for a smoother experience.  
-            - 🎨 **UI Tweaks**: Added a touch of color and love to the output.  
+            ## 💖 New Update:
+            - 🛠️ Bug Fixes: Resolved various issues to improve stability and performance.
+            - 🚀 Performance Enhancements: Further optimized the codebase for an even smoother experience.
+            - 🎨 UI Updates: Refined the interface with additional tweaks and improvements.
 
-            🥰 Thank you for being awesome! Enjoy the love-filled update! 💫
+            ** Enjoy the latest enhancements! 💫 **
