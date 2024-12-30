@@ -24,7 +24,7 @@ jobs:
 
       - name: Compile resource file
         run: |
-          windres ./jap/resource.rc -o resource.o
+          windres ./jap/resoucre.rc -o resource.o
 
       - name: Build
         shell: bash
