@@ -22,17 +22,13 @@ jobs:
           mkdir -p jap/nlohmann 
           wget https://github.com/nlohmann/json/releases/download/v3.11.3/json.hpp -O jap/nlohmann/json.hpp
 
-      - name: Compile resource file
-        run: |
-          windres ./jap/resoucre.rc -o resource.o
-
       - name: Build
         shell: bash
         run: |
           mv ./jap/config.json config.json
           for file in ./jap/*.cpp; do
             exe_name=$(basename "${file%.cpp}.exe")
-            g++ "$file" resource.o -o "$exe_name" -static -O2 -I ./jap
+            g++ "$file" -o "$exe_name" -static -O2 -I ./jap
           done
           7z a -r JustAsPlanned.zip *.exe config.json
 
