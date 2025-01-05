@@ -169,7 +169,7 @@ void patch_code(const std::string &input_filename,
   std::cout << CYAN << "Patched to: '" << output_filename << "'." << RESET
             << std::endl;
 }
-
+#pragma clang diagnostic ignored "-Wbranch-anlaysis"
 int main(int argc, char *argv[]) {
   std::string config_path = "config.json"; // Default configuration file name
 
