@@ -2,13 +2,12 @@
 Make all DLC free and playable in a Certain Rhythm Game.
 
 ## Forked
-[![Build](https://github.com/Veha0001/JustAsPlanned/actions/workflows/build.yml/badge.svg)](https://github.com/Veha0001/JustAsPlanned/actions/workflows/build.yml)
-- **Maintain**: (Not Wildcard,idk)  💤.
-- **Fixed**: Problem Hex `00`.. 🗃️.
-- **Feature**: Output Colors 🎨😎.
-- **Build**: GitHub Workflow 📦🔨.
-- **Code Worked?**: Yes💭👍
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/Veha0001/JustAsPlanned/build.yml?branch=main&style=for-the-badge&labelColor=%234c4f69&color=%2340a02b&logo=cplusplusbuilder)](https://github.com/Veha0001/JustAsPlanned/actions)
+[![GitHub Release](https://img.shields.io/github/v/release/Veha0001/JustAsPlanned?display_name=release&style=for-the-badge&labelColor=%231e1e2e&color=%23f38ba8)](https://github.com/Veha0001/JustAsPlanned/releases)
 
+**Good** enough.
+
+---
 # 8/2/2023
 Added `GameAssembly.dll` patcher, you just have to put the original `GameAssembly.dll` in the same folder as `patch_ga.py` then it will generate `GameAssembly_patched.dll` and put it in Muse Dash directory.
 Currently doesn't have Wildcard Bytes support (cuz im skill issue 😭)
