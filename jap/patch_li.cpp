@@ -28,11 +28,9 @@ void printColored(const std::string &text, Color color, bool bold = false) {
 }
 
 void goodbye() {
-#ifdef __WIN32
+#ifdef _WIN32
   std::cout << "Press Enter to continue...";
   std::cin.get();
-#else
-  return;
 #endif
 }
 

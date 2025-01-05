@@ -16,11 +16,9 @@
 #define CYAN "\033[36m"
 
 void goodbye() {
-#ifdef __WIN32
+#ifdef _WIN32
   std::cout << "Press Enter to continue...";
   std::cin.get();
-#else
-  return;
 #endif
 }
 
