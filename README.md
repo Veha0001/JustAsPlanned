@@ -7,9 +7,9 @@ Make all DLC free and playable in a Certain Rhythm Game.
 
 # How to Use  
 
-1. Download the zip file and extract it. 📂  
+1. Download the zip file and extract it. 📂 
 2. Copy `GameAssembly.dll` from the game's folder to the extracted folder.  
-3. Run the executable you prefer, like `patch_ga` or `patch_sd` (recommended). ⚙️  
+3. Run the executable you prefer, like `patch_ga` or `patch_sd` (recommended). ⚙️
 4. After patching, take `GameAssembly_patched.dll` and move it back to the game folder. Rename it to `GameAssembly.dll`.  
 5. Open the game and enjoy your patched experience! 🎮  
 
