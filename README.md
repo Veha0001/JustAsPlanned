@@ -1,6 +1,14 @@
 # Just As Planned
 Make all DLC free and playable in a Certain Rhythm Game.
 
+## Forked
+[![Build](https://github.com/Veha0001/JustAsPlanned/actions/workflows/build.yml/badge.svg)](https://github.com/Veha0001/JustAsPlanned/actions/workflows/build.yml)
+- **Maintain**: (Not Wildcard,idk)  💤.
+- **Fixed**: Problem Hex `00`.. 🗃️.
+- **Feature**: Output Colors 🎨😎.
+- **Build**: GitHub Workflow 📦🔨.
+- **Code Worked?**: Yes💭👍
+
 # 8/2/2023
 Added `GameAssembly.dll` patcher, you just have to put the original `GameAssembly.dll` in the same folder as `patch_ga.py` then it will generate `GameAssembly_patched.dll` and put it in Muse Dash directory.
 Currently doesn't have Wildcard Bytes support (cuz im skill issue 😭)
@@ -14,7 +22,3 @@ The `consts.py`, `main.py`, and `utility.py` is not needed if you use the `patch
 2. Then run `patch_ga.py` (`python patch_ga.py`)
 3. Wait for a while until it generated `GameAssembly_patched.dll`
 4. Put `GameAssembly_patched.dll` to your Muse Dash directory and rename it to `GameAssembly.dll`
-
-
-> [!Note]
-> For faster version written in C++ check `master` branch!

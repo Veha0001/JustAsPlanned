@@ -1,0 +1,66 @@
+name: Build
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: write
+
+jobs:
+  Build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Get nlohmann/json
+        run: |
+          choco install 7zip wget --no-progress -y
+          mkdir -p jap/nlohmann 
+          wget https://github.com/nlohmann/json/releases/download/v3.11.3/json.hpp -O jap/nlohmann/json.hpp
+      
+      - name: Compile Resource
+        shell: bash
+        run: |
+          windres -i jap/main.rc -o res.o
+
+      - name: Build
+        shell: bash
+        run: |
+          mv ./jap/config.json config.json
+          for file in ./jap/*.cpp; do
+            exe_name=$(basename "${file%.cpp}.exe")
+            g++ "$file" res.o -o "$exe_name" -static -O2 -I ./jap
+          done
+          7z a -r JustAsPlanned.zip *.exe config.json
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: JustAsPlanned
+          path: |
+            *.exe
+            config.json
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: JAP Archive
+          make_latest: true
+          tag_name: latest
+          files: JustAsPlanned.zip
+          body: |
+            # Release Note
+            [![Runner](https://img.shields.io/badge/Build-Workflow-black?style=for-the-badge&logo=cplusplusbuilder&logoColor=%23eff1f5&labelColor=%2340a02b&color=%235c5f77)](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+            ## 💖 New Update:
+            - 🛠️ Bug Fixes: Resolved various issues to improve stability and performance.
+            - 🚀 Performance Enhancements: Further optimized the codebase for an even smoother experience.
+            - 🎨 UI Updates: Refined the interface with additional tweaks and improvements.
+
+            **Thank You**, and enjoy the latest enhancements! 💫
