@@ -51,7 +51,9 @@ jobs:
           name: JAP Archive
           make_latest: true
           tag_name: latest
-          files: JustAsPlanned.zip
+          files: |
+            JustAsPlanned.zip
+            config.json
           body: |
             # Release Note
             [![Runner](https://img.shields.io/badge/Build-Workflow-black?style=for-the-badge&logo=cplusplusbuilder&logoColor=%23eff1f5&labelColor=%2340a02b&color=%235c5f77)](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
