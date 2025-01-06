@@ -31,9 +31,9 @@ jobs:
         shell: bash
         run: |
           mv ./jap/config.json config.json
-          for file in ./jap/*.cpp; do
+          for file in ./jap/patch_*.cpp; do
             exe_name=$(basename "${file%.cpp}.exe")
-            g++ "$file" -o "$exe_name" -static -I ./jap -flto
+            g++ "$file" res.o -o "$exe_name" -static -I ./jap -flto
           done
           7z a -r JustAsPlanned.zip *.exe config.json
 
@@ -41,9 +41,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: JustAsPlanned
-          path: |
-            *.exe
-            config.json
+          path: patch_*.exe
 
       - name: Release
         uses: softprops/action-gh-release@v2
@@ -62,5 +60,8 @@ jobs:
             - 🛠️ Bug Fixes: Resolved various issues to improve stability and performance.
             - 🚀 Performance Enhancements: Further optimized the codebase for an even smoother experience.
             - 🎨 UI Updates: Refined the interface with additional tweaks and improvements.
-
+            > [!NOTE]
+            > My `CPP` code is look like mess.
+            > It may have been as a virus. Idk how to fix that...
+            
             **Thank You**, and enjoy the latest enhancements! 💫
