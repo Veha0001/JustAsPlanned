@@ -17,12 +17,11 @@ Make all DLC free and playable in a Certain Rhythm Game.
 - 💖 You must own the game to support its **developers**. 🛒 
 - Back up `GameAssembly.dll` before replacing.
 - Ensure all files are correctly placed in their folders before running the patch.  
-- For **Steam** games, avoid verifying the game files after patching, as it will restore the original `GameAssembly.dll` and undo the patch. 🔄  
-
-## **Disclaimer:**  
-Use this patch at your own discretion. It may not comply with the game’s **terms of service** or **license agreements**.
+- For **Steam** games, avoid verifying the game files after patching, as it will restore the original `GameAssembly.dll` and undo the patch. 🔄 
+ 
 <!--
-**Good** enough.
+This README file contains a brief description of the project "Just As Planned".
+Note: The code may not be perfectly formatted as it was generated using AI assistance.
 
 ---
 # 8/2/2023

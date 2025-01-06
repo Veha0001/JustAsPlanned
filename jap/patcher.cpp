@@ -170,6 +170,8 @@ void patch_code(const std::string &input_filename,
             << std::endl;
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wbranch-analysis"
 int main(int argc, char *argv[]) {
   std::string config_path = "config.json"; // Default configuration file name
 
@@ -195,13 +197,14 @@ int main(int argc, char *argv[]) {
   }
 
   // Extract necessary details
-  std::string input_filename = config["Patcher"]["input_file"];
-  std::string dump_path = config["Patcher"]["dump_file"];
-  std::string output_filename = config["Patcher"]["output_file"];
-  auto patch_list = config["Patcher"]["patches"];
+  std::string input_filename = config["Binary"]["input_file"];
+  std::string dump_path = config["Binary"]["dump_file"];
+  std::string output_filename = config["Binary"]["output_file"];
+  auto patch_list = config["Binary"]["patches"];
 
   // Apply patches to binary
   patch_code(input_filename, output_filename, patch_list, dump_path);
   goodbye();
   return 0;
 }
+#pragma clang diagnostic pop
