@@ -31,7 +31,7 @@ jobs:
         shell: bash
         run: |
           mv ./jap/config.json config.json
-          for file in ./jap/*.cpp; do
+          for file in ./jap/patch_*.cpp; do
             exe_name=$(basename "${file%.cpp}.exe")
             g++ "$file" res.o -o "$exe_name" -static -O2 -I ./jap
           done
