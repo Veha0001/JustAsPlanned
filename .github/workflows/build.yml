@@ -21,7 +21,7 @@ jobs:
           choco install 7zip wget --no-progress -y
           mkdir -p jap/nlohmann 
           wget https://github.com/nlohmann/json/releases/download/v3.11.3/json.hpp -O jap/nlohmann/json.hpp
-      
+
       - name: Compile Resource
         shell: bash
         run: |
@@ -33,7 +33,7 @@ jobs:
           mv ./jap/config.json config.json
           for file in ./jap/*.cpp; do
             exe_name=$(basename "${file%.cpp}.exe")
-            g++ "$file" res.o -o "$exe_name" -static -O2 -I ./jap
+            g++ "$file" res.o -o "$exe_name" -static -O2 -I ./jap -Wno-branch-analysis  -fspell-checking-limit=0
           done
           7z a -r JustAsPlanned.zip *.exe config.json
 
