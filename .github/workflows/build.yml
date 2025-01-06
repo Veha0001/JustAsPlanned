@@ -33,7 +33,7 @@ jobs:
           mv ./jap/config.json config.json
           for file in ./jap/*.cpp; do
             exe_name=$(basename "${file%.cpp}.exe")
-            g++ "$file" res.o -o "$exe_name" -static -I ./jap -flto
+            g++ "$file" -o "$exe_name" -static -I ./jap -flto
           done
           7z a -r JustAsPlanned.zip *.exe config.json
 
