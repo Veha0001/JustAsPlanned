@@ -2,6 +2,7 @@
 Make all DLC free and playable in a Certain Rhythm Game.
 
 # 30/3/2025
+[![GitHub Release](https://img.shields.io/github/v/release/Veha0001/JustAsPlanned?sort=date&display_name=release&style=for-the-badge&logo=github&logoColor=%239399b2&label=Download&labelColor=%231e1e2e&color=%23f38ba8)](https://github.com/Veha0001/JustAsPlanned/releases)
 ![Capture ScreenShot](Capture.png)
 
 # 8/2/2023
