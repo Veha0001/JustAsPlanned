@@ -1,0 +1,69 @@
+name: Nightly Build
+
+on: [push]
+
+permissions:
+  contents: write
+
+jobs:
+  nightly:
+    name: Nightly
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    defaults:
+      run:
+        working-directory: jap
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup scripts
+        run: |
+          pip install -r requirements.txt
+          pip install sdkmanager
+          sdkmanager --license
+          sdkmanager --install 'build-tools;36.0.0'
+          echo $ANDROID_HOME
+          mkdir -p scripts/lib
+          cp $ANDROID_HOME/build-tools/36.0.0/lib/apksigner.jar scripts/lib 
+          cp $ANDROID_HOME/build-tools/36.0.0/apksigner* scripts/
+          rustup default stable
+          cargo install --git https://github.com/Veha0001/Hexsaly
+          cp $HOME/.cargo/bin/hexsaly* scripts
+      - name: Prepare Archive
+        run: zip -r "MUSE_${RUNNER_OS}-${RUNNER_ARCH}_JAP.zip" .
+      - name: Publish Release
+        if: ${{ inputs['publish-release'] }}
+        uses: softprops/action-gh-release@v2
+        with:
+          make_latest: true
+          files: MUSE_${{ runner.os }}-${{ runner.arch }}_JAP.zip
+          name: Nightly Archive
+          tag_name: nightly
+          body: |
+            # Just As Planned
+
+            Required:
+            - Python: 3.10.0^
+            - Java: 8^
+
+            ## Patcher
+
+            Windows
+
+            ```pwsh
+            .\scripts\hexsaly
+            ```
+
+            Unix
+
+            ```sh
+            ./scripts/hexsaly
+            ```
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
