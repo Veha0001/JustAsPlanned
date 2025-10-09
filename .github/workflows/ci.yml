@@ -23,9 +23,8 @@ jobs:
       - name: Setup scripts
         run: |
           pip install -r requirements.txt
-          pip install sdkmanager
-          sdkmanager --install 'build-tools;36.0.0'
           echo $ANDROID_HOME
+          ls $ANDROID_HOME
           mkdir -p scripts/lib
           cp $ANDROID_HOME/build-tools/36.0.0/lib/apksigner.jar scripts/lib 
           cp $ANDROID_HOME/build-tools/36.0.0/apksigner* scripts/
@@ -35,7 +34,6 @@ jobs:
       - name: Prepare Archive
         run: zip -r "MUSE_${RUNNER_OS}-${RUNNER_ARCH}_JAP.zip" .
       - name: Publish Release
-        if: ${{ inputs['publish-release'] }}
         uses: softprops/action-gh-release@v2
         with:
           make_latest: true
