@@ -24,13 +24,13 @@ jobs:
         run: |
           pip install -r requirements.txt
           echo $ANDROID_HOME
-          ls $ANDROID_HOME
+          ls $ANDROID_HOME/*
           mkdir -p scripts/lib
-          cp $ANDROID_HOME/build-tools/36.0.0/lib/apksigner.jar scripts/lib 
-          cp $ANDROID_HOME/build-tools/36.0.0/apksigner* scripts/
+          cp $ANDROID_HOME/build-tools/36.0.0/lib/apksigner.jar scripts/lib
+          cp $ANDROID_HOME/build-tools/36.0.0/apksig* scripts/
           rustup default stable
           cargo install --git https://github.com/Veha0001/Hexsaly
-          cp $HOME/.cargo/bin/hexsaly* scripts
+          cp $HOME/.cargo/bin/hexsaly* scripts/hexsaly
       - name: Prepare Archive
         run: zip -r "MUSE_${RUNNER_OS}-${RUNNER_ARCH}_JAP.zip" .
       - name: Publish Release
