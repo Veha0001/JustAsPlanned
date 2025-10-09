@@ -24,7 +24,7 @@ jobs:
         run: |
           pip install -r requirements.txt
           mkdir -p scripts/lib
-          if [ "$RUNNER_OS" = "Windows" ]; then
+          if [ $RUNNER_OS = "Windows" ]; then
             export ANDROID_HOME="${ANDROID_HOME//\\//}"
           fi
           cp $ANDROID_HOME/build-tools/36.0.0/lib/apksigner.jar scripts/lib
@@ -33,7 +33,12 @@ jobs:
           cargo install --git https://github.com/Veha0001/Hexsaly
           cp $HOME/.cargo/bin/hexsaly* scripts/hexsaly
       - name: Prepare Archive
-        run: zip -r "MUSE_${RUNNER_OS}-${RUNNER_ARCH}_JAP.zip" .
+        run: |
+          if [ $RUNNER_OS = "Windows" ]; then
+            7z a -tzip -r "MUSE_${RUNNER_OS}-${RUNNER_ARCH}_JAP.zip" .
+          else
+            zip -r "MUSE_${RUNNER_OS}-${RUNNER_ARCH}_JAP.zip" .
+          fi
       - name: Publish Release
         uses: softprops/action-gh-release@v2
         with:
