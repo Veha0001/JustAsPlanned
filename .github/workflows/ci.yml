@@ -23,8 +23,6 @@ jobs:
       - name: Setup scripts
         run: |
           pip install -r requirements.txt
-          echo $ANDROID_HOME
-          ls $ANDROID_HOME/*
           mkdir -p scripts/lib
           cp $ANDROID_HOME/build-tools/36.0.0/lib/apksigner.jar scripts/lib
           cp $ANDROID_HOME/build-tools/36.0.0/apksig* scripts/
