@@ -4,6 +4,10 @@ on: [push]
 
 permissions:
   contents: write
+defaults:
+  run:
+    working-directory: jap
+    shell: bash
 
 jobs:
   nightly:
@@ -12,11 +16,6 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-
-    defaults:
-      run:
-        working-directory: jap
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -25,7 +24,6 @@ jobs:
         run: |
           pip install -r requirements.txt
           pip install sdkmanager
-          sdkmanager --license
           sdkmanager --install 'build-tools;36.0.0'
           echo $ANDROID_HOME
           mkdir -p scripts/lib
