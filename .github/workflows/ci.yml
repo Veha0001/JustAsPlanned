@@ -10,9 +10,27 @@ defaults:
     shell: bash
 
 jobs:
+  master:
+    name: CI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create Archive
+        run: zip -r ../JustAsPlanned.zip .
+      - name: Publish Release
+        uses: softprops/action-gh-release@v2
+        with:
+          make_latest: true
+          files: JustAsPlanned.zip
+          name: Nightly Archive
+          tag_name: nightly
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   nightly:
     name: Nightly
     runs-on: ${{ matrix.os }}
+    needs: [master]
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
@@ -31,7 +49,7 @@ jobs:
           cp $ANDROID_HOME/build-tools/36.0.0/apksigner* scripts/
           rustup default stable
           cargo install --git https://github.com/Veha0001/Hexsaly
-          cp $HOME/.cargo/bin/hexsaly* scripts/hexsaly
+          cp $HOME/.cargo/bin/hexsaly* scripts/
       - name: Prepare Archive
         run: |
           if [ $RUNNER_OS = "Windows" ]; then
@@ -73,5 +91,7 @@ jobs:
             ./scripts/hexsaly
             ```
 
+            > [!NOTE]
+            > `JustAsPlanned.zip` is `./src`
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
