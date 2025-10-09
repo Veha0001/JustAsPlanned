@@ -1,6 +1,6 @@
 name: Nightly Build
 
-on: [push]
+on: [push, workflow_dispatch]
 
 permissions:
   contents: write
@@ -43,25 +43,31 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           make_latest: true
-          files: MUSE_${{ runner.os }}-${{ runner.arch }}_JAP.zip
+          files: ./jap/MUSE_${{ runner.os }}-${{ runner.arch }}_JAP.zip
           name: Nightly Archive
           tag_name: nightly
           body: |
             # Just As Planned
 
             Required:
-            - Python: 3.10.0^
-            - Java: 8^
+            - Python: `3.10.0^`
+            - Java: `8^`
+
+            ```bash
+            python -m main src/<apk> 
+            ```
+
+            For more details run with `-h`
 
             ## Patcher
 
-            Windows
+            ### Windows
 
             ```pwsh
             .\scripts\hexsaly
             ```
 
-            Unix
+            ### Unix
 
             ```sh
             ./scripts/hexsaly
