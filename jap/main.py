@@ -1,4 +1,11 @@
-#!/bin/env python
+#
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "demodapk",
+# ]
+# ///
+
 """Main Patcher"""
 
 import os
@@ -30,7 +37,7 @@ CONFIG_DATA = {
                 ],
                 "end": [
                     {
-                        "run": "apksigner sign --key ./assets/user.pk8 --cert ./assets/user.x509.pem $BUILD",
+                        "run": "apksigner sign --key ./assets/android.pk8 --cert ./assets/android.x509.pem $BUILD",
                         "title": "Signing Build",
                     }
                 ],

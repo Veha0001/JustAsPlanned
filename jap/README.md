@@ -3,13 +3,19 @@
 install requirements
 
 ```
-pip install -r ./requirements.txt
+pip install demodapk --upgrade
 ```
 
-then backup the apk using `App Manager`, `Kanade` etc...
+create keystore by using [keyfitsign](https://github.com/Veha0001/keyfitsign).
 
-and then run
+copy your created keys into `./assets/user.pk8` and `./assets/user.x509.pem`
+
+uses `App Manager` or other to get the apk.
+
+and then copy the apk to `./src`
+
+run the main script:
 
 ```bash
-python -m main.py src/<apk>
+python -m main src/<apk> -Sf -dex
 ```
