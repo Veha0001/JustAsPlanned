@@ -24,13 +24,11 @@ jobs:
         run: |
           pip install -r requirements.txt
           mkdir -p scripts/lib
-          cp $ANDROID_HOME/build-tools/36.0.0/lib/apksigner.jar scripts/lib
-          find $ANDROID_HOME/build-tools/
           if [ "$RUNNER_OS" = "Windows" ]; then
-            cp $ANDROID_HOME/build-tools/36.0.0/bin/apksigner.bat scripts/
-          else
-            cp $ANDROID_HOME/build-tools/36.0.0/apksigner scripts/
+            export ANDROID_HOME="${ANDROID_HOME//\\//}"
           fi
+          cp $ANDROID_HOME/build-tools/36.0.0/lib/apksigner.jar scripts/lib
+          cp $ANDROID_HOME/build-tools/36.0.0/apksigner* scripts/
           rustup default stable
           cargo install --git https://github.com/Veha0001/Hexsaly
           cp $HOME/.cargo/bin/hexsaly* scripts/hexsaly
