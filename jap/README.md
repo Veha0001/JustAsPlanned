@@ -1,10 +1,22 @@
 # JAP
 
-install requirements
+Just As Planned
 
-```
+## Install
+
+using pip
+
+```bash
 pip install demodapk --upgrade
 ```
+
+using uv
+
+```bash
+uv sync --script main.py
+```
+
+## Setup
 
 create keystore by using [keyfitsign](https://github.com/Veha0001/keyfitsign).
 
@@ -14,8 +26,16 @@ uses `App Manager` or other to get the apk.
 
 and then copy the apk to `./src`
 
-run the main script:
+## Run
+
+using python
 
 ```bash
 python -m main src/<apk> -Sf -dex
+```
+
+using uv
+
+```bash
+uv run main.py <apk>
 ```
