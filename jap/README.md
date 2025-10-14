@@ -7,7 +7,7 @@ Just As Planned
 using pip
 
 ```bash
-pip install demodapk --upgrade
+pip install -r ./requirements.txt
 ```
 
 or using uv
@@ -24,14 +24,14 @@ copy your created keys into `./assets/android.pk8` and `./assets/android.x509.pe
 
 uses [App Manager](https://github.com/MuntashirAkon/AppManager) or other way to get the apk.
 
-and then copy the apk to `./src`
+and then copy the apk to `./src` OR whatever.
 
 ## Run
 
 using python
 
 ```bash
-python -m main src/<apk> -Sf -dex
+python main.py src/<apk> -Sf -dex
 ```
 
 or using uv

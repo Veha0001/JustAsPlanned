@@ -4,7 +4,7 @@ src/build
 *.exe
 *.xml
 *.zip
-
+jap/config.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

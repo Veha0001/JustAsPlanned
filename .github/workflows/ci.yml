@@ -14,9 +14,12 @@ jobs:
     name: CI
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Create Archive
-        run: zip -r ../JustAsPlanned.zip .
+        run: |
+          base64 --decode config.bin > config.json
+          rm config.bin
+          zip -r ../JustAsPlanned.zip .
       - name: Publish Release
         uses: softprops/action-gh-release@v2
         with:
@@ -36,14 +39,10 @@ jobs:
         os: [ubuntu-latest, windows-latest]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Install the latest version of uv
-        uses: astral-sh/setup-uv@v6
-        with:
-          version: "latest"
+        uses: actions/checkout@v5
       - name: Setup scripts
         run: |
-          uv sync --script main.py
+          pip install -r requirements.txt
           mkdir -p scripts/lib
           if [ $RUNNER_OS = "Windows" ]; then
             export ANDROID_HOME="${ANDROID_HOME//\\//}"
@@ -55,6 +54,9 @@ jobs:
           cp $HOME/.cargo/bin/hexsaly* scripts/
       - name: Prepare Archive
         run: |
+          base64 --decode config.bin > config.json
+          rm config.bin
+
           if [ $RUNNER_OS = "Windows" ]; then
             7z a -tzip -r "MUSE_${RUNNER_OS}-${RUNNER_ARCH}_JAP.zip" .
           else
@@ -75,12 +77,14 @@ jobs:
             - Java: `8^`
 
             ```bash
-            python -m main src/<apk> 
+            python main.py src/<apk>
             ```
 
             For more details run with `-h`
 
             ## Patcher
+
+            Tool: [Hexsaly](https://github.com/Veha0001/Hexsaly)
 
             ### Windows
 
@@ -95,6 +99,6 @@ jobs:
             ```
 
             > [!NOTE]
-            > `JustAsPlanned.zip` is `./src`
+            > `JustAsPlanned.zip` is `./jap`
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

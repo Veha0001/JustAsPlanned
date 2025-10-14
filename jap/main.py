@@ -1,11 +1,10 @@
-#
 # /// script
-# requires-python = ">=3.12"
+# requires-python = ">=3.10"
 # dependencies = [
 #     "demodapk",
+#     "pillow",
 # ]
 # ///
-
 """Main Patcher"""
 
 import os
