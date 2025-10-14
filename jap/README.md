@@ -16,6 +16,14 @@ or using uv
 uv sync --script main.py
 ```
 
+### Update tool
+
+To make it work
+
+```bash
+python main.py -ua
+```
+
 ## Setup
 
 create keystore by using [keyfitsign](https://github.com/Veha0001/keyfitsign).
@@ -24,14 +32,14 @@ copy your created keys into `./assets/android.pk8` and `./assets/android.x509.pe
 
 uses [App Manager](https://github.com/MuntashirAkon/AppManager) or other way to get the apk.
 
-and then copy the apk to `./src` OR whatever.
+and then copy the apk to `./src/`.
 
 ## Run
 
 using python
 
 ```bash
-python main.py src/<apk> -Sf -dex
+python main.py ./src/<apk> -Sf -dex
 ```
 
 or using uv

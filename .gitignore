@@ -4,8 +4,7 @@ src/build
 *.exe
 *.xml
 *.zip
-jap/config.json
-
+*.cast
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
