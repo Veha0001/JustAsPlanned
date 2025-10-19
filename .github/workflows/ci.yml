@@ -37,6 +37,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
       - name: Setup scripts
         run: |
           mkdir -p scripts/lib
@@ -48,6 +51,14 @@ jobs:
           rustup default stable
           cargo install --git https://github.com/Veha0001/Hexsaly
           cp $HOME/.cargo/bin/hexsaly* scripts/
+      - name: PyInstaller build
+        run: |
+          pip install git+https://github.com/Veha0001/DemodAPK
+          pip install pillow pyinstaller
+          pyinstaller main.spec --workpath=output/build --distpath=output/dist
+          rm *.py *.spec
+          mv output/dist/* .
+          rm -rf output
       - name: Prepare Archive
         run: |
           if [ $RUNNER_OS = "Windows" ]; then

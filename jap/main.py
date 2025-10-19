@@ -12,14 +12,29 @@ from types import SimpleNamespace
 
 import rich_click as click
 from demodapk import __version__
-from demodapk.mods import dowhat, runsteps
-from demodapk.utils import show_logo
+from demodapk.mark import msg
+from demodapk.mods import (
+    ConfigHandler,
+    UpdateContext,
+    dowhat,
+    get_demo,
+    get_finish,
+    get_the_inputs,
+    get_updates,
+)
+from demodapk.utils import console, show_logo
+from genicons import update_existing_mipmaps, validate_image
 
 SCRIPTS_PATH = os.path.abspath("scripts")
+
 CONFIG_DATA = {
     "apps": {
         "com.prpr.musedash": {
-            "apkeditor": {"javaopts": "-Xmx1G", "output": "./build/MUSEDASH"},
+            "apkeditor": {
+                "javaopts": "-Xmx1G",
+                "output": "./build/MUSEDASH",
+                "dex": True,
+            },
             "app_name": "MUSEDASH",
             "commands": {
                 "quietly": True,
@@ -27,10 +42,6 @@ CONFIG_DATA = {
                     {
                         "run": "hexsaly open $BASE_LIB/arm64-v8a/libil2cpp.so -i 0",
                         "title": "Hexsaly > [cyan3]Just As Planned [black](Android ARM64)",
-                    },
-                    {
-                        "run": "python genicons.py assets/rin.png $BASE_RESDIR -rf",
-                        "title": "Updated new icons",
                     },
                     "rm -rf $BASE/root/lib/armeabi-v7a",
                 ],
@@ -49,6 +60,39 @@ CONFIG_DATA = {
 }
 
 os.environ["PATH"] = SCRIPTS_PATH + os.pathsep + os.environ.get("PATH", "")
+
+
+def runsteps(args, packer):
+    """
+    Custom execute the complete APK modification workflow.
+    """
+    basic = get_the_inputs(packer, args)
+    conf = ConfigHandler(basic.apk_config)
+
+    android_manifest, smali_folder, resources_folder, value_strings, decoded_dir = (
+        get_demo(
+            conf,
+            basic,
+            args=args,
+        )
+    )
+    with console.status(
+        "[bold orange_red1]Modifying...", spinner_style="orange_red1", spinner="point"
+    ):
+        ctx = UpdateContext(
+            value_strings=value_strings,
+            smali_folder=smali_folder,
+            resources_folder=resources_folder,
+            package_orig_name=basic.package_orig_name,
+            package_orig_path=basic.package_orig_path,
+            dex_folder_exists=basic.dex_folder_exists,
+        )
+        base_resdir = os.environ["BASE_RESDIR"]
+        src_image = validate_image("./assets/rin.png")
+        update_existing_mipmaps(base_resdir, src_image, quiet=True)
+        msg.progress("Updated new icons")
+        get_updates(conf, android_manifest, basic.apk_config, ctx, args=args)
+    get_finish(conf, decoded_dir=decoded_dir, apk_config=basic.apk_config, args=args)
 
 
 @click.command()

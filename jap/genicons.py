@@ -3,9 +3,10 @@
 # Author: Veha0001
 # Last Updated: 2025-08-18
 
+import argparse
 import os
 import sys
-import argparse
+
 from PIL import Image, ImageDraw, ImageOps
 
 VERSION = "1.1.5"
@@ -139,7 +140,7 @@ def generate_adaptive_foreground(source_img, size, mask_file=None):
     return fg_img
 
 
-def update_existing_mipmaps(res_dir, source_img):
+def update_existing_mipmaps(res_dir, source_img, quiet: bool = False):
     for root, _, files in os.walk(res_dir):
         # Only process folders that contain 'mipmap-' in their name
         if "mipmap-" not in os.path.basename(root):
@@ -159,7 +160,7 @@ def update_existing_mipmaps(res_dir, source_img):
                     new_img.putalpha(alpha)
                     new_img.save(path, "PNG", optimize=True)
                     rel_path = os.path.relpath(path, res_dir)
-                    print(f"Updated: {rel_path}")
+                    print(f"Updated: {rel_path}") if not quiet else None
                 except Exception as e:
                     print(f"Failed updating {path}: {e}")
 
