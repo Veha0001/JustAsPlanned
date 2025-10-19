@@ -1,21 +1,37 @@
+# vim: set filetype=python:
 # -*- mode: python ; coding: utf-8 -*-
-from PyInstaller.utils.hooks import collect_data_files
-from PyInstaller.utils.hooks import copy_metadata
-datas = collect_data_files('rich_color_ext', include_py_files=False)
-datas += copy_metadata('readchar')
+from PyInstaller.building.api import EXE, PYZ
+from PyInstaller.building.build_main import Analysis
+from PyInstaller.utils.hooks import collect_data_files, copy_metadata
+
+datas = collect_data_files("rich_color_ext", include_py_files=False)
+datas += copy_metadata("readchar")
 
 a = Analysis(
-    ['main.py'],
+    ["main.py"],
     pathex=[],
     binaries=[],
     datas=datas,
-    hiddenimports=['readchar', 'genicons', 'urllib.request', 'urllib.error', 'http.client', 'ssl', 'certifi', 'inquirer', 'rich_click', 'rich_gradient', 'rich'],
+    hiddenimports=[
+        "readchar",
+        "genicons",
+        "urllib.request",
+        "urllib.error",
+        "http.client",
+        "ssl",
+        "inquirer",
+        "rich_click",
+        "rich_gradient",
+        "rich",
+    ],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
     excludes=[],
     noarchive=False,
     optimize=0,
+    win_no_prefer_redirects=False,
+    win_private_assemblies=False,
 )
 pyz = PYZ(a.pure)
 
@@ -25,8 +41,8 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    icon='assets/rin.ico',
-    name='patcher',
+    icon="assets/rin.ico",
+    name="patcher",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -40,4 +56,3 @@ exe = EXE(
     codesign_identity=None,
     entitlements_file=None,
 )
-
