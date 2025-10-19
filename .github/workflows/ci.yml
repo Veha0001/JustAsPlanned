@@ -59,6 +59,7 @@ jobs:
           rm *.py *.spec
           mv output/dist/* .
           rm -rf output
+          rm *.txt
       - name: Prepare Archive
         run: |
           if [ $RUNNER_OS = "Windows" ]; then

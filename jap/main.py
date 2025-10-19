@@ -8,6 +8,7 @@
 """Main Patcher"""
 
 import os
+import shutil
 from types import SimpleNamespace
 
 import rich_click as click
@@ -30,11 +31,7 @@ PATCH_ID: int = 0
 CONFIG_DATA = {
     "apps": {
         "com.prpr.musedash": {
-            "apkeditor": {
-                "javaopts": "-Xmx1G",
-                "output": "./build/MUSEDASH",
-                "dex": True,
-            },
+            "apkeditor": {"javaopts": "-Xmx1G", "output": "./build/MUSEDASH"},
             "app_name": "MUSEDASH",
             "commands": {
                 "quietly": True,
@@ -42,8 +39,7 @@ CONFIG_DATA = {
                     {
                         "run": f"hexsaly open $BASE_LIB/arm64-v8a/libil2cpp.so -i {PATCH_ID}",
                         "title": "Hexsaly > [cyan3]Just As Planned [black](Android ARM64)",
-                    },
-                    "rm -rf $BASE/root/lib/armeabi-v7a",
+                    }
                 ],
                 "end": [
                     {
@@ -60,6 +56,20 @@ CONFIG_DATA = {
 }
 
 os.environ["PATH"] = SCRIPTS_PATH + os.pathsep + os.environ.get("PATH", "")
+
+
+def get_customize(src_icon: str = "./assets/rin.png", uicon: bool = False):
+    base_lib = os.environ["BASE_LIB"]
+    libarm = os.path.join(f"{base_lib}/armeabi-v7a")
+    if os.path.exists(libarm):
+        shutil.rmtree(libarm)
+        msg.progress(f"Removed [magenta1]{os.path.basename(libarm)}")
+
+    base_resdir = os.environ["BASE_RESDIR"]
+    if os.path.exists(src_icon) and not uicon:
+        src_image = validate_image(src_icon)
+        update_existing_mipmaps(base_resdir, src_image, quiet=True)
+        msg.progress("Updated new icons")
 
 
 def runsteps(args, packer):
@@ -87,10 +97,7 @@ def runsteps(args, packer):
             package_orig_path=basic.package_orig_path,
             dex_folder_exists=basic.dex_folder_exists,
         )
-        base_resdir = os.environ["BASE_RESDIR"]
-        src_image = validate_image("./assets/rin.png")
-        update_existing_mipmaps(base_resdir, src_image, quiet=True)
-        msg.progress("Updated new icons")
+        get_customize(src_icon=args.jpic, uicon=args.njp)
         get_updates(conf, android_manifest, basic.apk_config, ctx, args=args)
     get_finish(conf, decoded_dir=decoded_dir, apk_config=basic.apk_config, args=args)
 
@@ -141,6 +148,21 @@ def runsteps(args, packer):
     help="Patch index range of jap android.",
 )
 @click.option(
+    "-jp",
+    "--jpic",
+    type=click.Path(exists=False, file_okay=True, dir_okay=False, path_type=str),
+    metavar="<path>",
+    default="./assets/rin.png",
+    help="Path to the new app_icon.",
+)
+@click.option(
+    "-njp",
+    "--njp",
+    is_flag=True,
+    default=False,
+    help="Uses original app_icon.",
+)
+@click.option(
     "-o",
     "--output",
     type=click.Path(exists=False, file_okay=True, dir_okay=True, path_type=str),
@@ -184,7 +206,7 @@ def runsteps(args, packer):
     "--version",
 )
 def main(**kwargs):
-    """patch: Just As Planned"""
+    """Patcher: Just As Planned"""
     global PATCH_ID
     args = SimpleNamespace(**kwargs)
     packer = CONFIG_DATA.get("apps", {})
