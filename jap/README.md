@@ -57,3 +57,12 @@ Run the **cli** in terminal.
 ```sh
 .\patcher.exe -h
 ```
+
+## Context
+
+`assets` images are from MuseDash.
+
+> [!NOTE]
+> You must own the base game. in the official sale, everything costs only `$$` btw.
+>
+> Love PeroPero!

@@ -10,6 +10,7 @@
 import os
 import platform
 import shutil
+import sys
 from types import SimpleNamespace
 
 import rich_click as click
@@ -26,6 +27,7 @@ from demodapk.mods import (
 )
 from demodapk.utils import console, show_logo
 from genicons import update_existing_mipmaps, validate_image
+from rich.panel import Panel
 
 HEXSALY_NO_DELAY = "-k" if os.name == "nt" or platform.system() == "Windows" else ""
 SCRIPTS_PATH = os.path.abspath("scripts")
@@ -40,27 +42,26 @@ CONFIG_DATA = {
                 "begin": [
                     {
                         "run": "hexsaly open $BASE_LIB/arm64-v8a/libil2cpp.so"
-                        f"-i $PATCH_ID {HEXSALY_NO_DELAY}",
+                        f" -i $PATCH_ID {HEXSALY_NO_DELAY}",
                         "title": "Hexsaly > [cyan3]Just As Planned [black](Android ARM64)",
                     }
                 ],
                 "end": [
                     {
                         "run": "apksigner sign --key ./assets/android.pk8"
-                        "--cert ./assets/android.x509.pem $BUILD",
+                        " --cert ./assets/android.x509.pem $BUILD",
                         "title": "Signing Build",
                     }
                 ],
             },
             "level": 2,
             "package": "com.prpr.musedashjap",
-            "manifest": {"reme_metadata": ["com.google.android.gms.games.APP_ID"]},
+            "manifest": {"remove_metadata": ["com.google.android.gms.games.APP_ID"]},
         }
     }
 }
 
 os.environ["PATH"] = SCRIPTS_PATH + os.pathsep + os.environ.get("PATH", "")
-os.environ["PATCH_ID"] = "0"
 
 
 def get_customize(src_icon: str = "./assets/rin.png", uicon: bool = False):
@@ -154,6 +155,7 @@ def runsteps(args, packer):
     type=int,
     metavar="<int>",
     default=0,
+    show_default=True,
     help="Patch index range of jap android.",
 )
 @click.option(
@@ -162,6 +164,7 @@ def runsteps(args, packer):
     type=click.Path(exists=False, file_okay=True, dir_okay=False, path_type=str),
     metavar="<path>",
     default="./assets/rin.png",
+    show_default=True,
     help="Path to the new app_icon.",
 )
 @click.option(
@@ -170,6 +173,15 @@ def runsteps(args, packer):
     is_flag=True,
     default=False,
     help="Uses original app_icon.",
+)
+@click.option(
+    "-p",
+    "--package",
+    metavar="<name>",
+    type=str,
+    default="com.prpr.musedashjap",
+    show_default=True,
+    help="Change the package name.",
 )
 @click.option(
     "-o",
@@ -204,6 +216,14 @@ def runsteps(args, packer):
     help="Skip Facebook API update.",
 )
 @click.option(
+    "-fb",
+    "--fbok",
+    type=str,
+    default=None,
+    metavar="<id;ct>",
+    help="Facebook api update.",
+)
+@click.option(
     "-nas",
     "--rename-smali",
     is_flag=True,
@@ -215,11 +235,31 @@ def runsteps(args, packer):
     "--version",
 )
 def main(**kwargs):
-    """Patcher: Just As Planned"""
+    """Patcher: Just As Planned (Android)"""
     args = SimpleNamespace(**kwargs)
     packer = CONFIG_DATA.get("apps", {})
+    if getattr(args, "package", None):
+        packer["com.prpr.musedash"]["package"] = args.package
+    if getattr(args, "fbok", None):
+        try:
+            app_id, client_token = str(args.fbok).split(":", 1)
+            packer["com.prpr.musedash"].setdefault("facebook", {}).update(
+                {"app_id": app_id.strip(), "client_token": client_token.strip()}
+            )
+        except ValueError:
+            console.print(
+                Panel(
+                    "Invalid format for -fb/fbok, Use <app_id:client_token>.",
+                    title="error",
+                    title_align="left",
+                    style="bold red",
+                ),
+            )
+            sys.exit(1)
+
     show_logo("MUSE JAP")
     dowhat(args, click)
+    os.environ["PATCH_ID"] = str(args.mid)
     runsteps(args, packer)
 
 
