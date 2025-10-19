@@ -47,3 +47,13 @@ or using uv
 ```bash
 uv run main.py <apk> [options]
 ```
+
+## Binary
+
+For `patcher.exe` or `patcher`.
+
+Run the **cli** in terminal.
+
+```sh
+.\patcher.exe -h
+```
