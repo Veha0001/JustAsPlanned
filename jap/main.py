@@ -26,7 +26,7 @@ from demodapk.utils import console, show_logo
 from genicons import update_existing_mipmaps, validate_image
 
 SCRIPTS_PATH = os.path.abspath("scripts")
-
+PATCH_ID: int = 0
 CONFIG_DATA = {
     "apps": {
         "com.prpr.musedash": {
@@ -40,7 +40,7 @@ CONFIG_DATA = {
                 "quietly": True,
                 "begin": [
                     {
-                        "run": "hexsaly open $BASE_LIB/arm64-v8a/libil2cpp.so -i 0",
+                        "run": f"hexsaly open $BASE_LIB/arm64-v8a/libil2cpp.so -i {PATCH_ID}",
                         "title": "Hexsaly > [cyan3]Just As Planned [black](Android ARM64)",
                     },
                     "rm -rf $BASE/root/lib/armeabi-v7a",
@@ -133,6 +133,14 @@ def runsteps(args, packer):
     help="Force to overwrite.",
 )
 @click.option(
+    "-m",
+    "--mid",
+    type=int,
+    metavar="<int>",
+    default=0,
+    help="Patch index range of jap android.",
+)
+@click.option(
     "-o",
     "--output",
     type=click.Path(exists=False, file_okay=True, dir_okay=True, path_type=str),
@@ -177,8 +185,10 @@ def runsteps(args, packer):
 )
 def main(**kwargs):
     """patch: Just As Planned"""
+    global PATCH_ID
     args = SimpleNamespace(**kwargs)
     packer = CONFIG_DATA.get("apps", {})
+    PATCH_ID = args.mid
     show_logo("MUSE JAP")
     dowhat(args, click)
     runsteps(args, packer)
