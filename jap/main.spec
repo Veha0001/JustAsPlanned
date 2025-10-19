@@ -41,7 +41,6 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    version="1.0.0",
     icon="assets/rich.ico",
     name="patcher",
     debug=False,
