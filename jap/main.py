@@ -8,6 +8,7 @@
 """Main Patcher"""
 
 import os
+import platform
 import shutil
 from types import SimpleNamespace
 
@@ -26,8 +27,9 @@ from demodapk.mods import (
 from demodapk.utils import console, show_logo
 from genicons import update_existing_mipmaps, validate_image
 
+HEXSALY_NO_DELAY = "-k" if os.name == "nt" or platform.system() == "Windows" else ""
 SCRIPTS_PATH = os.path.abspath("scripts")
-PATCH_ID: int = 0
+
 CONFIG_DATA = {
     "apps": {
         "com.prpr.musedash": {
@@ -37,35 +39,41 @@ CONFIG_DATA = {
                 "quietly": True,
                 "begin": [
                     {
-                        "run": f"hexsaly open $BASE_LIB/arm64-v8a/libil2cpp.so -i {PATCH_ID}",
+                        "run": "hexsaly open $BASE_LIB/arm64-v8a/libil2cpp.so"
+                        f"-i $PATCH_ID {HEXSALY_NO_DELAY}",
                         "title": "Hexsaly > [cyan3]Just As Planned [black](Android ARM64)",
                     }
                 ],
                 "end": [
                     {
-                        "run": "apksigner sign --key ./assets/android.pk8 --cert ./assets/android.x509.pem $BUILD",
+                        "run": "apksigner sign --key ./assets/android.pk8"
+                        "--cert ./assets/android.x509.pem $BUILD",
                         "title": "Signing Build",
                     }
                 ],
             },
             "level": 2,
             "package": "com.prpr.musedashjap",
-            "manifest": {"remove_metadata": ["com.google.android.gms.games.APP_ID"]},
+            "manifest": {"reme_metadata": ["com.google.android.gms.games.APP_ID"]},
         }
     }
 }
 
 os.environ["PATH"] = SCRIPTS_PATH + os.pathsep + os.environ.get("PATH", "")
+os.environ["PATCH_ID"] = "0"
 
 
 def get_customize(src_icon: str = "./assets/rin.png", uicon: bool = False):
-    base_lib = os.environ["BASE_LIB"]
+    """
+    Custom Update: remove arm32, apply new icons
+    """
+    base_lib = os.environ.get("BASE_LIB")
     libarm = os.path.join(f"{base_lib}/armeabi-v7a")
     if os.path.exists(libarm):
         shutil.rmtree(libarm)
-        msg.progress(f"Removed [magenta1]{os.path.basename(libarm)}")
+        msg.progress(f"Removed [royal_blue1]{os.path.basename(libarm)}")
 
-    base_resdir = os.environ["BASE_RESDIR"]
+    base_resdir = os.environ.get("BASE_RESDIR")
     if os.path.exists(src_icon) and not uicon:
         src_image = validate_image(src_icon)
         update_existing_mipmaps(base_resdir, src_image, quiet=True)
@@ -86,6 +94,7 @@ def runsteps(args, packer):
             args=args,
         )
     )
+
     with console.status(
         "[bold orange_red1]Modifying...", spinner_style="orange_red1", spinner="point"
     ):
@@ -207,10 +216,8 @@ def runsteps(args, packer):
 )
 def main(**kwargs):
     """Patcher: Just As Planned"""
-    global PATCH_ID
     args = SimpleNamespace(**kwargs)
     packer = CONFIG_DATA.get("apps", {})
-    PATCH_ID = args.mid
     show_logo("MUSE JAP")
     dowhat(args, click)
     runsteps(args, packer)
