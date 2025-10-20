@@ -284,8 +284,8 @@ def main(**kwargs):
     if getattr(args, "single_apk", True):
         build = apk_file
     begin_list[0]["run"] = (
-        f"hexsaly open {base_path}/root/lib/arm64-v8a/libil2cpp.so"
-        f" -i {args.mid} {HEXSALY_NO_DELAY}"
+        f"hexsaly {HEXSALY_NO_DELAY} open {base_path}/root/lib/arm64-v8a/libil2cpp.so"
+        f" -i {args.mid}"
     )
     end_list[0]["run"] = (
         "apksigner sign --key ./assets/android.pk8"
