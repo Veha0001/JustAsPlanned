@@ -12,6 +12,7 @@ import platform
 import shutil
 import sys
 from types import SimpleNamespace
+from typing import Any
 
 import rich_click as click
 from demodapk import __version__
@@ -42,7 +43,7 @@ CONFIG_DATA = {
                 "begin": [
                     {
                         "run": "hexsaly open $BASE_LIB/arm64-v8a/libil2cpp.so"
-                        f" -i $PATCH_ID {HEXSALY_NO_DELAY}",
+                        f" {HEXSALY_NO_DELAY} ",
                         "title": "Hexsaly > [cyan3]Just As Planned [black](Android ARM64)",
                     }
                 ],
@@ -62,6 +63,19 @@ CONFIG_DATA = {
 }
 
 os.environ["PATH"] = SCRIPTS_PATH + os.pathsep + os.environ.get("PATH", "")
+
+
+def get_path_build(decoded_dir: str):
+    """
+    Get correct path output
+
+    :return: output_apk_path, output_apk_file
+    """
+    decoded_dir = os.path.abspath(decoded_dir)
+    output_apk_name = os.path.basename(decoded_dir.rstrip("/"))
+    output_apk_path = os.path.join(decoded_dir, output_apk_name + ".apk")
+    output_apk_file = decoded_dir + ".apk"
+    return output_apk_path, output_apk_file
 
 
 def get_customize(src_icon: str = "./assets/rin.png", uicon: bool = False):
@@ -187,6 +201,8 @@ def runsteps(args, packer):
     "-o",
     "--output",
     type=click.Path(exists=False, file_okay=True, dir_okay=True, path_type=str),
+    default="./build/MUSEDASH",
+    show_default=True,
     metavar="<path>",
     help="Path to writes decode and build.",
 )
@@ -237,13 +253,14 @@ def runsteps(args, packer):
 def main(**kwargs):
     """Patcher: Just As Planned (Android)"""
     args = SimpleNamespace(**kwargs)
-    packer = CONFIG_DATA.get("apps", {})
+    packer: dict[str, Any] = CONFIG_DATA.get("apps", {})
+    app_key = next(iter(packer.keys()))
     if getattr(args, "package", None):
-        packer["com.prpr.musedash"]["package"] = args.package
+        packer[app_key]["package"] = args.package
     if getattr(args, "fbok", None):
         try:
             app_id, client_token = str(args.fbok).split(":", 1)
-            packer["com.prpr.musedash"].setdefault("facebook", {}).update(
+            packer[app_key].setdefault("facebook", {}).update(
                 {"app_id": app_id.strip(), "client_token": client_token.strip()}
             )
         except ValueError:
@@ -257,9 +274,26 @@ def main(**kwargs):
             )
             sys.exit(1)
 
+    commands: dict = packer[app_key].setdefault("commands", {})
+    begin_list: dict = commands.setdefault("begin", {})
+    end_list: dict = commands.setdefault("end", {})
+    # Fix execute commands
+    base_path = os.path.splitext(args.output)[0]
+    apk_path, apk_file = get_path_build(base_path)
+    build = apk_path
+    if getattr(args, "single_apk", True):
+        build = apk_file
+    begin_list[0]["run"] = (
+        f"hexsaly open {base_path}/root/lib/arm64-v8a/libil2cpp.so"
+        f" -i {args.mid} {HEXSALY_NO_DELAY}"
+    )
+    end_list[0]["run"] = (
+        "apksigner sign --key ./assets/android.pk8"
+        f" --cert ./assets/android.x509.pem {build}"
+    )
+    # Main workflows
     show_logo("MUSE JAP")
     dowhat(args, click)
-    os.environ["PATCH_ID"] = str(args.mid)
     runsteps(args, packer)
 
 
