@@ -57,7 +57,6 @@ CONFIG_DATA = {
             },
             "level": 2,
             "package": "com.prpr.musedashjap",
-            "manifest": {"remove_metadata": ["com.google.android.gms.games.APP_ID"]},
         }
     }
 }
