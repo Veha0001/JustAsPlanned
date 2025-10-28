@@ -87,21 +87,7 @@ jobs:
 
             For more details run with `-h`
 
-            ## Patcher
-
-            Tool: [Hexsaly](https://github.com/Veha0001/Hexsaly)
-
-            ### Windows
-
-            ```pwsh
-            .\scripts\hexsaly
-            ```
-
-            ### Unix
-
-            ```sh
-            ./scripts/hexsaly
-            ```
+            > About tool: [Hexsaly](https://github.com/Veha0001/Hexsaly)
 
             > [!NOTE]
             > `JustAsPlanned.zip` is `./jap`

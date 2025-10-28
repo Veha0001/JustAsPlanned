@@ -53,7 +53,7 @@ Run the **cli** in terminal.
 Run to update **APKEditor**.
 
 ```pwsh
-.\patcher -ua
+.\patcher.exe -ua
 ```
 
 ### Apply Patches

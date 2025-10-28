@@ -3,6 +3,7 @@
 # dependencies = [
 #     "demodapk",
 #     "pillow",
+#     "typer",
 # ]
 # ///
 """Main Patcher"""
