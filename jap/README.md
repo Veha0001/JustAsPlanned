@@ -16,14 +16,6 @@ or using uv
 uv sync --script main.py
 ```
 
-### Update tool
-
-To make it work
-
-```bash
-python main.py -ua
-```
-
 ## Setup
 
 create keystore by using [keyfitsign](https://github.com/Veha0001/keyfitsign).
@@ -48,15 +40,35 @@ or using uv
 uv run main.py <apk> [options]
 ```
 
-## Binary
+## Android Patcher
 
 For `patcher.exe` or `patcher`.
 
 Run the **cli** in terminal.
 
-```sh
+```pwsh
 .\patcher.exe -h
 ```
+
+Run to update **APKEditor**.
+
+```pwsh
+.\patcher -ua
+```
+
+### Apply Patches
+
+All data patches are in the [config](./config.json).
+
+Normal steps:
+
+- Install **Rust** via `winget` or `rustup`.
+- Run `cargo install --git https://github.com/Veha0001/Hexsaly`.
+- Make sure to add `~/.cargo/bin/` to your PATH.
+- Download the `config.json` into a folder.
+- Copy the required input files for the patches into that folder.
+- Run the command `hexsaly`.
+- Copy the resulting `*_patched*` files back to replace the original library files.
 
 ## Context
 

@@ -267,7 +267,7 @@ def main(**kwargs):
             console.print(
                 Panel(
                     "Invalid format for -fb/fbok, Use <app_id:client_token>.",
-                    title="error",
+                    title="Error",
                     title_align="left",
                     style="bold red",
                 ),
@@ -291,6 +291,22 @@ def main(**kwargs):
         "apksigner sign --key ./assets/android.pk8"
         f" --cert ./assets/android.x509.pem {build}"
     )
+    if args.mid == 1:
+        begin_list[0]["title"] = (
+            "Hexsaly > [cyan3]Just As Planned [Master] [black](Android ARM64)"
+        )
+    elif args.mid > 1:
+        begin_list[0]["title"] = f"Hexsaly > [cyan3]Index {args.mid}"
+    elif args.mid < 0:
+        console.print(
+            Panel(
+                f"Hexsaly cannot allow negative index [white]{args.mid}",
+                title="Error",
+                title_align="left",
+                style="bold red",
+            ),
+        )
+        sys.exit(1)
     # Main workflows
     show_logo("MUSE JAP")
     dowhat(args, click)
