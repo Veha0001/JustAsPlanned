@@ -10,7 +10,6 @@
 import os
 import platform
 import shutil
-import sys
 from types import SimpleNamespace
 from typing import Any
 
@@ -27,8 +26,8 @@ from demodapk.mods import (
     get_updates,
 )
 from demodapk.utils import console, show_logo
-from genicons import update_existing_mipmaps, validate_image
-from rich.panel import Panel
+from genicons import app as genicons_cli
+from typer.testing import CliRunner
 
 HEXSALY_NO_DELAY = "-k" if os.name == "nt" or platform.system() == "Windows" else ""
 SCRIPTS_PATH = os.path.abspath("scripts")
@@ -89,8 +88,8 @@ def get_customize(src_icon: str = "./assets/rin.png", uicon: bool = False):
 
     base_resdir = os.environ.get("BASE_RESDIR")
     if os.path.exists(src_icon) and not uicon:
-        src_image = validate_image(src_icon)
-        update_existing_mipmaps(base_resdir, src_image, quiet=True)
+        runner = CliRunner()
+        runner.invoke(genicons_cli, ["repng", str(src_icon), str(base_resdir)])
         msg.progress("Updated new icons")
 
 
@@ -263,15 +262,9 @@ def main(**kwargs):
                 {"app_id": app_id.strip(), "client_token": client_token.strip()}
             )
         except ValueError:
-            console.print(
-                Panel(
-                    "Invalid format for -fb/fbok, Use <app_id:client_token>.",
-                    title="Error",
-                    title_align="left",
-                    style="bold red",
-                ),
+            raise click.UsageError(
+                "Invalid format for -fbok, Use <app_id:client_token>."
             )
-            sys.exit(1)
 
     commands: dict = packer[app_key].setdefault("commands", {})
     begin_list: dict = commands.setdefault("begin", {})
@@ -297,15 +290,7 @@ def main(**kwargs):
     elif args.mid > 1:
         begin_list[0]["title"] = f"Hexsaly > [cyan3]Index {args.mid}"
     elif args.mid < 0:
-        console.print(
-            Panel(
-                f"Hexsaly cannot allow negative index [white]{args.mid}",
-                title="Error",
-                title_align="left",
-                style="bold red",
-            ),
-        )
-        sys.exit(1)
+        raise click.UsageError(f"Hexsaly cannot allow negative index: {args.mid}")
     # Main workflows
     show_logo("MUSE JAP")
     dowhat(args, click)

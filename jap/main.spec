@@ -13,6 +13,7 @@ a = Analysis(
     binaries=[],
     datas=datas,
     hiddenimports=[
+        "typer",
         "readchar",
         "genicons",
         "urllib.request",
