@@ -1,7 +1,7 @@
 # /// script
 # requires-python = ">=3.10"
 # dependencies = [
-#     "demodapk==1.1.16",
+#     "demodapk==1.1.17",
 # ]
 # ///
 """
