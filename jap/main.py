@@ -1,130 +1,47 @@
 # /// script
 # requires-python = ">=3.10"
 # dependencies = [
-#     "demodapk",
-#     "pillow",
-#     "typer",
+#     "demodapk==1.1.16",
 # ]
 # ///
-"""Main Patcher"""
+"""
+Copyright (c) 2025 @Veha0001. All Rights Reserved.
+"""
 
-import os
-import platform
-import shutil
+import sys
 from types import SimpleNamespace
-from typing import Any
 
 import rich_click as click
 from demodapk import __version__
-from demodapk.mark import msg
-from demodapk.mods import (
-    ConfigHandler,
-    UpdateContext,
-    dowhat,
-    get_demo,
-    get_finish,
-    get_the_inputs,
-    get_updates,
-)
-from demodapk.utils import console, show_logo
-from genicons import app as genicons_cli
-from typer.testing import CliRunner
+from demodapk.mark import update_apkeditor
+from demodapk.mods import runsteps
+from demodapk.utils import show_logo
 
-HEXSALY_NO_DELAY = "-k" if os.name == "nt" or platform.system() == "Windows" else ""
-SCRIPTS_PATH = os.path.abspath("scripts")
-
-CONFIG_DATA = {
-    "apps": {
-        "com.prpr.musedash": {
-            "apkeditor": {"javaopts": "-Xmx1G", "output": "./build/MUSEDASH"},
-            "app_name": "MUSEDASH",
-            "commands": {
-                "quietly": True,
-                "begin": [
-                    {
-                        "run": "hexsaly open $BASE_LIB/arm64-v8a/libil2cpp.so"
-                        f" {HEXSALY_NO_DELAY} ",
-                        "title": "Hexsaly > [cyan3]Just As Planned [black](Android ARM64)",
-                    }
+CONFIG_DATA: dict = {
+    "com.prpr.musedash": {
+        "apkeditor": {"output": "./build/MUSEDASH", "dex": True},
+        "app_name": "MUSEDASH",
+        "level": 2,
+        "package": "com.prpr.musedashjap",
+        "hex": [
+            {
+                "path": "root/lib/arm64-v8a/libil2cpp.so",
+                "patch": [
+                    "00 18 40 F9 60 00 00 B4 E2 03 1F 2A | 1F 20 03 D5",
+                    "F4 4F BE A9 FD 7B 01 A9 FD 43 00 91 ?? ?? ?? ?? ?? ?? ?? ?? E8 00 00 37 ?? ?? ?? ?? ?? ?? ?? ?? 00 01 40 B9 ?? ?? ?? ?? E8 03 00 32 68 ?? ?? 39 ?? ?? ?? ?? ?? ?? ?? ?? 60 02 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 08 E0 40 B9 48 00 00 35 ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? E8 00 00 35 ?? ?? ?? ?? ?? ?? ?? ?? 00 01 40 B9 ?? ?? ?? ?? E8 03 00 32 88 ?? ?? 39 60 02 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 08 E0 40 B9 68 00 00 35 ?? ?? ?? ?? 60 02 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? 08 E0 40 B9 ?? ?? ?? ?? ?? ?? ?? ?? 21 00 00 94 ?? ?? ?? ?? 60 02 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 08 E0 40 B9 ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? 69 02 40 F9 ?? ?? ?? ?? F4 03 00 AA ?? ?? ?? ?? 08 01 40 F9 | 20 00 80 D2 C0 03 5F D6",
+                    "F5 0F 1D F8 F4 4F 01 A9 FD 7B 02 A9 FD 83 00 91 ?? ?? ?? ?? ?? ?? ?? ?? E8 00 00 37 ?? ?? ?? ?? ?? ?? ?? ?? 00 01 40 B9 ?? ?? ?? ?? E8 03 00 32 ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? 80 02 40 F9 ?? ?? ?? ?? 40 04 00 B4 ?? ?? ?? ?? ?? ?? ?? ?? E2 03 1F AA A1 02 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? E2 03 1F AA 61 02 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 80 02 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? A1 02 40 F9 E2 03 1F AA | 20 00 80 D2 C0 03 5F D6",
                 ],
-                "end": [
-                    {
-                        "run": "apksigner sign --key ./assets/android.pk8"
-                        " --cert ./assets/android.x509.pem $BUILD",
-                        "title": "Signing Build",
-                    }
-                ],
-            },
-            "level": 2,
-            "package": "com.prpr.musedashjap",
-        }
-    }
+            }
+        ],
+        "path": {
+            "rm": "root/lib/armeabi-v7a",
+            "add": "./assets/res/ resources/package_1/res",
+        },
+    },
 }
 
-os.environ["PATH"] = SCRIPTS_PATH + os.pathsep + os.environ.get("PATH", "")
 
-
-def get_path_build(decoded_dir: str):
-    """
-    Get correct path output
-
-    :return: output_apk_path, output_apk_file
-    """
-    decoded_dir = os.path.abspath(decoded_dir)
-    output_apk_name = os.path.basename(decoded_dir.rstrip("/"))
-    output_apk_path = os.path.join(decoded_dir, output_apk_name + ".apk")
-    output_apk_file = decoded_dir + ".apk"
-    return output_apk_path, output_apk_file
-
-
-def get_customize(src_icon: str = "./assets/rin.png", uicon: bool = False):
-    """
-    Custom Update: remove arm32, apply new icons
-    """
-    base_lib = os.environ.get("BASE_LIB")
-    libarm = os.path.join(f"{base_lib}/armeabi-v7a")
-    if os.path.exists(libarm):
-        shutil.rmtree(libarm)
-        msg.progress(f"Removed [royal_blue1]{os.path.basename(libarm)}")
-
-    base_resdir = os.environ.get("BASE_RESDIR")
-    if os.path.exists(src_icon) and not uicon:
-        runner = CliRunner()
-        runner.invoke(genicons_cli, ["repng", str(src_icon), str(base_resdir)])
-        msg.progress("Updated new icons")
-
-
-def runsteps(args, packer):
-    """
-    Custom execute the complete APK modification workflow.
-    """
-    basic = get_the_inputs(packer, args)
-    conf = ConfigHandler(basic.apk_config)
-
-    android_manifest, smali_folder, resources_folder, value_strings, decoded_dir = (
-        get_demo(
-            conf,
-            basic,
-            args=args,
-        )
-    )
-
-    with console.status(
-        "[bold orange_red1]Modifying...", spinner_style="orange_red1", spinner="point"
-    ):
-        ctx = UpdateContext(
-            value_strings=value_strings,
-            smali_folder=smali_folder,
-            resources_folder=resources_folder,
-            package_orig_name=basic.package_orig_name,
-            package_orig_path=basic.package_orig_path,
-            dex_folder_exists=basic.dex_folder_exists,
-        )
-        get_customize(src_icon=args.jpic, uicon=args.njp)
-        get_updates(conf, android_manifest, basic.apk_config, ctx, args=args)
-    get_finish(conf, decoded_dir=decoded_dir, apk_config=basic.apk_config, args=args)
-
-
+# INFO: https://click.palletsprojects.com/en/stable/api/
 @click.command()
 @click.help_option("-h", "--help")
 @click.argument(
@@ -135,18 +52,12 @@ def runsteps(args, packer):
 )
 @click.option(
     "-i",
-    "--in",
+    "--id",
     "index",
     type=int,
     default=None,
     metavar="<int>",
     help="Index of package configured.",
-)
-@click.option(
-    "-sc",
-    "--schema",
-    is_flag=True,
-    help="Apply schema to the config.",
 )
 @click.option(
     "-S",
@@ -156,6 +67,15 @@ def runsteps(args, packer):
     help="Keep only the rebuilt APK.",
 )
 @click.option(
+    "-s",
+    "--skip",
+    "skip_list",
+    metavar="<key>",
+    type=click.Choice(["fb", "rename"]),
+    multiple=True,
+    help="Skip specific JSON config keys.",
+)
+@click.option(
     "-f",
     "--force",
     is_flag=True,
@@ -163,53 +83,26 @@ def runsteps(args, packer):
     help="Force to overwrite.",
 )
 @click.option(
-    "-m",
-    "--mid",
-    type=int,
-    metavar="<int>",
-    default=0,
-    show_default=True,
-    help="Patch index range of jap android.",
-)
-@click.option(
-    "-jp",
-    "--jpic",
-    type=click.Path(exists=False, file_okay=True, dir_okay=False, path_type=str),
-    metavar="<path>",
-    default="./assets/rin.png",
-    show_default=True,
-    help="Path to the new app_icon.",
-)
-@click.option(
-    "-njp",
-    "--njp",
-    is_flag=True,
-    default=False,
-    help="Uses original app_icon.",
-)
-@click.option(
-    "-p",
-    "--package",
-    metavar="<name>",
-    type=str,
-    default="com.prpr.musedashjap",
-    show_default=True,
-    help="Change the package name.",
-)
-@click.option(
     "-o",
     "--output",
     type=click.Path(exists=False, file_okay=True, dir_okay=True, path_type=str),
-    default="./build/MUSEDASH",
-    show_default=True,
     metavar="<path>",
     help="Path to writes decode and build.",
 )
 @click.option(
     "-ua",
-    "--update-apkeditor",
+    "--getup",  # Wake Up!
+    "update_apkeditor",
     is_flag=True,
     help="Update APKEditor latest version.",
+)
+@click.option(
+    "-fb",
+    "--fbapi",
+    type=str,
+    default=None,
+    metavar="<id;ct>",
+    help="Facebook api update.",
 )
 @click.option(
     "-dex",
@@ -219,82 +112,69 @@ def runsteps(args, packer):
     help="Decode with raw dex.",
 )
 @click.option(
-    "-nn",
-    "--no-rename",
-    is_flag=True,
-    help="Keep manifest names.",
-)
-@click.option(
-    "-nfb",
-    "--no-facebook",
-    is_flag=True,
-    help="Skip Facebook API update.",
-)
-@click.option(
-    "-fb",
-    "--fbok",
-    type=str,
-    default=None,
-    metavar="<id;ct>",
-    help="Facebook api update.",
-)
-@click.option(
-    "-nas",
-    "--rename-smali",
+    "-sm",
+    "--xsmali",
     is_flag=True,
     help="Rename package in smali files and directories.",
 )
+@click.option(
+    "-m",
+    "--master",
+    is_flag=True,
+    default=False,
+    help="All master unlocked.",
+)
+@click.option(
+    "-res",
+    "--res-dir",
+    metavar="<str>",
+    type=click.Path(exists=True, path_type=str),
+    default="./assets/res/",
+    help="Path to JAP resources.",
+)
+@click.option("-ez", "--easy", is_flag=True, help="Easy original res.")
 @click.version_option(
     __version__,
     "-v",
     "--version",
+    message="Muse, demodapk v%(version)s",
 )
 def main(**kwargs):
-    """Patcher: Just As Planned (Android)"""
+    """Just As Planned: APK patcher"""
     args = SimpleNamespace(**kwargs)
-    packer: dict[str, Any] = CONFIG_DATA.get("apps", {})
-    app_key = next(iter(packer.keys()))
-    if getattr(args, "package", None):
-        packer[app_key]["package"] = args.package
-    if getattr(args, "fbok", None):
+    packer: dict = CONFIG_DATA
+    show_logo("MUSE.JAP")
+
+    if args.update_apkeditor:
+        update_apkeditor()
+        sys.exit(0)
+    apk_dir = getattr(args, "apk_dir", None)
+    if apk_dir is None:
+        ctx = click.get_current_context()
+        click.echo(ctx.get_help())
+        sys.exit(0)
+
+    if getattr(args, "fbapi", None):
         try:
-            app_id, client_token = str(args.fbok).split(":", 1)
-            packer[app_key].setdefault("facebook", {}).update(
+            app_id, client_token = str(args.fbapi).split(":", 1)
+            packer["com.prpr.musedash"].setdefault("facebook", {}).update(
                 {"app_id": app_id.strip(), "client_token": client_token.strip()}
             )
         except ValueError:
             raise click.UsageError(
                 "Invalid format for -fbok, Use <app_id:client_token>."
             )
+    if args.master:
+        master_patch = "F5 0F 1D F8 F4 4F 01 A9 FD 7B 02 A9 FD 83 00 91 ?? ?? ?? ?? ?? ?? ?? ?? E8 00 00 37 ?? ?? ?? ?? ?? ?? ?? ?? 00 01 40 B9 ?? ?? ?? ?? E8 03 00 32 ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? 88 00 08 36 ?? ?? ?? ?? 48 00 00 35 ?? ?? ?? ?? ?? ?? ?? ?? C0 00 00 36 ?? ?? ?? ?? ?? ?? ?? ?? E0 03 00 32 ?? ?? ?? ?? C0 03 5F D6 ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? 88 00 08 36 08 E0 40 B9 48 00 00 35 | 20 00 80 D2 C0 03 5F D6"
+        packer["com.prpr.musedash"]["hex"][0]["patch"].append(master_patch)
 
-    commands: dict = packer[app_key].setdefault("commands", {})
-    begin_list: dict = commands.setdefault("begin", {})
-    end_list: dict = commands.setdefault("end", {})
-    # Fix execute commands
-    base_path = os.path.splitext(args.output)[0]
-    apk_path, apk_file = get_path_build(base_path)
-    build = apk_path
-    if getattr(args, "single_apk", True):
-        build = apk_file
-    begin_list[0]["run"] = (
-        f"hexsaly {HEXSALY_NO_DELAY} open {base_path}/root/lib/arm64-v8a/libil2cpp.so"
-        f" -i {args.mid}"
-    )
-    end_list[0]["run"] = (
-        "apksigner sign --key ./assets/android.pk8"
-        f" --cert ./assets/android.x509.pem {build}"
-    )
-    if args.mid == 1:
-        begin_list[0]["title"] = (
-            "Hexsaly > [cyan3]Just As Planned [Master] [black](Android ARM64)"
+    if args.res_dir is not None:
+        packer["com.prpr.musedash"]["path"]["add"] = (
+            args.res_dir + " resources/package_1/res"
         )
-    elif args.mid > 1:
-        begin_list[0]["title"] = f"Hexsaly > [cyan3]Index {args.mid}"
-    elif args.mid < 0:
-        raise click.UsageError(f"Hexsaly cannot allow negative index: {args.mid}")
-    # Main workflows
-    show_logo("MUSE JAP")
-    dowhat(args, click)
+    if args.easy:
+        packer["com.prpr.musedash"]["path"].pop("add", None)
+
     runsteps(args, packer)
 
 
