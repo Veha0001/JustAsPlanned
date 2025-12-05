@@ -56,6 +56,9 @@ Run to update **APKEditor**.
 .\patcher.exe -ua
 ```
 
+> [!NOTE]
+> Need to sign the apk before install.
+
 ### Apply Patches
 
 All data patches are in the [config](./config.json).
