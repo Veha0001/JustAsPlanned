@@ -53,8 +53,8 @@ jobs:
           cp $HOME/.cargo/bin/hexsaly* scripts/
       - name: PyInstaller build
         run: |
-          pip install git+https://github.com/Veha0001/DemodAPK
-          pip install pillow pyinstaller
+          pip install demodapk==1.1.17
+          pip install pyinstaller
           pyinstaller main.spec --workpath=output/build --distpath=output/dist
           rm *.py *.spec
           mv output/dist/* .
