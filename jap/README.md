@@ -57,7 +57,10 @@ Run to update **APKEditor**.
 ```
 
 > [!NOTE]
-> Need to sign the apk before install.
+> Need to sign the apk before install
+>
+> And also copy the OBB files to the new one. LIKE THIS:
+> `Android/obb/{package}/main.{versioncode}.{package}.obb`
 
 ### Apply Patches
 
